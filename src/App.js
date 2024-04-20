@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import Header from "./Components/Header"
 import Content from "./Components/Content"
+import PostWrite from "./Components/Post/PostWrite"
 
 const Wrap = styled.div`
     position: relative;
@@ -18,14 +19,24 @@ const Size = styled.div`
     hegiht: 100%;
 `
 function App(props) {
+
+
+    const [on, setOn] = useState(false)
+    const clickBtn = () => {
+        setOn(!on)
+        console.log(on)
+    }
+
+    
+
     return (
         <Wrap>
             <Size>
-                <Header></Header>
+                <Header  clickBtn={clickBtn}/>
                 <Content>
-
                 </Content>
             </Size>
+            <PostWrite clickBtn={clickBtn} block={on} />
         </Wrap>
     )
 }
