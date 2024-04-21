@@ -16,7 +16,6 @@ const Wrap = styled.div`
 function Content(props) {
     return (
         <Wrap>
-            
         </Wrap>
     )
 }

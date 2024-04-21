@@ -112,7 +112,7 @@ function Header(props) {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
-
+    
     return (
         <Wrap>
             <Left>
@@ -125,7 +125,12 @@ function Header(props) {
                 <Button>
                     <FontAwesomeIcon icon={faMagnifyingGlass} size="2xl" />
                 </Button>
-                <Button onClick={props.clickBtn} > {/* 3번째 버튼 포스트 작성을 위해 props 제작 */}
+                <Button 
+                    onClick={() => {
+                        props.clickBtn()
+                        props.createNick()
+                    }}
+                > {/* 3번째 버튼 포스트 작성을 위해 props 제작 */}
                     <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
                 </Button>
                 <Button>

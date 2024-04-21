@@ -3,6 +3,8 @@ import styled from "styled-components"
 import Header from "./Components/Header"
 import Content from "./Components/Content"
 import PostWrite from "./Components/Post/PostWrite"
+import {createNickName} from "./Components/Utils/randomNick.js"
+
 
 const Wrap = styled.div`
     position: relative;
@@ -20,23 +22,27 @@ const Size = styled.div`
 `
 function App(props) {
 
-
+    const [nick, setNick] = useState()
     const [on, setOn] = useState(false)
     const clickBtn = () => {
         setOn(!on)
         console.log(on)
     }
 
-    
+    const HandleChangeNick = () => {
+        setNick(createNickName())
+        console.log(nick)
+    }
 
     return (
         <Wrap>
             <Size>
-                <Header  clickBtn={clickBtn}/>
+                <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
                 <Content>
+                    
                 </Content>
             </Size>
-            <PostWrite clickBtn={clickBtn} block={on} />
+            <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
         </Wrap>
     )
 }

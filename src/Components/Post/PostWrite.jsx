@@ -24,12 +24,25 @@ const ModalWrap = styled.div`
     background-color: white;
     top: 20%;
     left: 30%;
-    background-color: red;
+    background-color: white;
     padding: 30px;
-    border: 0.5px solid;
-    border-color: rgb(40,40,40);
+`
+const Header = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-content:center;
 `
 
+const Image = styled.img`
+    display: flex;
+    align-content:center;
+`
+const Span = styled.div`
+    display:flex;
+    align-content:center;
+    margin-left: 10px;
+`
 const Content = styled.div`
     width: 100%;
     height: 100%;
@@ -41,52 +54,59 @@ const Attach = styled.div`
     width: 100%;
     height: 100%;
 `
-const Footer = styled.div`
+const Send = styled.button`
+    position: relative;
+    width: 100px;
+    height: 30px;
+    border-radius: 15px;
+    border: 0;
+    float:right;
 `
 
-function PostWrite({block}) {
+function PostWrite({block, nick}) {
 
   // 상태 변수를 사용하여 내용과 포커스 상태를 관리합니다.
-    const [content, setContent] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
+    const [title, setTitle] = useState('');
 
     // p 태그의 내용이 변경될 때마다 상태를 업데이트합니다.
     const handleContentChange = (e) => {
-        setContent(e.target.value);
+        setTitle(e.target.value);
     };
 
-    // p 태그에 포커스가 들어오거나 나갈 때 상태를 업데이트합니다.
-    const handleFocusChange = (focused) => {
-        setIsFocused(focused);
-    };
     return (
         block ? (
             <Wrap block={block}>
                 <ModalWrap>
-                    <img className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
+                    <Header>
+                        <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
+                        <Span>
+                            {nick}
+                        </Span>
+                    </Header>
                     <Content>
                         <p 
-                            contentEditable
+                            suppressContentEditableWarning={true}
+                            contentEditable={true}
                             onInput={handleContentChange}
-                            onFocus={() => handleFocusChange(true)}
-                            onBlur={() => handleFocusChange(false)}
                             style={{ 
-                                border: '1px solid #ccc',
+                                border: '0',
                                 minHeight: '16px',
-                                padding: '5px',
-                                color: isFocused ? 'initial' : '#aaa', // 포커스 여부에 따라 글자색 변경,
+                                padding: 's5px',
+                                color: 'initial',
+                                outline: 'none'
                             }}
                         >
-                            {content}
+                            {title}
                         </p>
                         <Attach>
-                            <FontAwesomeIcon icon={faImage} style={{marginRight: "10px"}}/>
+                            <FontAwesomeIcon 
+                                icon={faImage} 
+                                style={{marginRight: "10px", cursor:"pointer"}} 
+                            />
                             <FontAwesomeIcon icon={faBarsStaggered} />
+                            <Send>작성하기</Send>
                         </Attach>
                     </Content>
-                    <Footer>
-
-                    </Footer>
                 </ModalWrap>
             </Wrap>
         ) : null

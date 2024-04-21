@@ -10,6 +10,8 @@ const Wrap = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
 `
 const ThemeWrap = styled.div`
     display: flex;
