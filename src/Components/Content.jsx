@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PostView from "./Post/PostView";
 
 const Wrap = styled.div`
     position: relative;
@@ -16,6 +17,7 @@ const Wrap = styled.div`
 function Content(props) {
     return (
         <Wrap>
+            <PostView />
         </Wrap>
     )
 }

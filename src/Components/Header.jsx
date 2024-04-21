@@ -116,7 +116,9 @@ function Header(props) {
     return (
         <Wrap>
             <Left>
-                <FontAwesomeIcon icon={faSchool} size="2xl" />
+                <a href="http://localhost:4002">
+                    <FontAwesomeIcon icon={faSchool} size="2xl" />
+                </a>
             </Left>
             <Center>
                 <Button>

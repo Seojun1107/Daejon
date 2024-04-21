@@ -1,8 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios"
 import "./index.css"
 
 const Wrap = styled.div`
@@ -63,16 +64,49 @@ const Send = styled.button`
     float:right;
 `
 
-function PostWrite({block, nick}) {
-
+function PostWrite({block, nick, clickBtn}) {
   // 상태 변수를 사용하여 내용과 포커스 상태를 관리합니다.
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState("");
 
     // p 태그의 내용이 변경될 때마다 상태를 업데이트합니다.
     const handleContentChange = (e) => {
         setTitle(e.target.value);
+        textareaRef.current.style.height = 'auto'; // height 초기화
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     };
+    const [ ip , setIp ] = useState();
 
+    useEffect( () => {    
+        axios.get('https://geolocation-db.com/json/')    
+        .then((res) => {      
+            setIp(res.data.IPv4)    
+        })  
+    },[])
+
+    // 글 작성 후 서버로 데이터를 전송하는 함수
+    
+    const SendPostData = async (ip, title, nick) => {
+        try {
+          const response = await axios.post("http://localhost:4002/post", {
+            ip,
+            title,
+            nick,
+          });
+          console.log(response.data); // 서버로부터의 응답 확인
+        } catch (error) {
+          console.error("Error sending data:", error);
+        }
+      };
+      
+      // Send 버튼 클릭 시 호출되는 함수
+      const handleSendClick = () => {
+        SendPostData(ip, title, nick);
+        clickBtn()
+      };
+
+    const textareaRef = useRef();
+  
+    
     return (
         block ? (
             <Wrap block={block}>
@@ -84,27 +118,27 @@ function PostWrite({block, nick}) {
                         </Span>
                     </Header>
                     <Content>
-                        <p 
-                            suppressContentEditableWarning={true}
-                            contentEditable={true}
-                            onInput={handleContentChange}
+                        <textarea
+                            onChange={handleContentChange}
                             style={{ 
                                 border: '0',
                                 minHeight: '16px',
-                                padding: 's5px',
+                                padding: '5px',
                                 color: 'initial',
                                 outline: 'none'
                             }}
+                            value={title}
+                            ref={textareaRef}
+                            rows={1} // 시작 높이 설정
                         >
-                            {title}
-                        </p>
+                        </textarea>
                         <Attach>
                             <FontAwesomeIcon 
                                 icon={faImage} 
                                 style={{marginRight: "10px", cursor:"pointer"}} 
                             />
                             <FontAwesomeIcon icon={faBarsStaggered} />
-                            <Send>작성하기</Send>
+                            <Send onClick={handleSendClick}>작성하기</Send>
                         </Attach>
                     </Content>
                 </ModalWrap>
