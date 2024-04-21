@@ -9,7 +9,6 @@ const Wrap = styled.div`
 const Header = styled.div`
     display: flex;
     width: 100%;
-    height: 100%;
     align-content:center;
 `
 
@@ -24,30 +23,36 @@ const Image = styled.img`
 const Span = styled.div`
     display:flex;
     align-content:center;
-    margin-left: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
 `
 const Content = styled.div`
     width: 100%;
-    height: 100%;
     font-size: 18px;
     
 `
+const ContentPost = styled.p`
 
+`
+const Hr = styled.hr`
+    margin-top: 30px;
+    width: 100%;
+`
 function PostView(props) {
     return (
         <Wrap>
             <Header>
                 <Image src="./user.png" alt="익명유저아이콘" />
                 <Span>
-                    김아무개
+                    {props.nick}
                 </Span>
             </Header>
             <Content>
-                <p
-                >
-                    룅니ㅗ린ㅇ모링ㄴ뫼ㅏ러ㅗㄴㅁ이ㅏㄹㅇㄴ마ㅣㄹㅇㅁ너
-                </p>
+                <ContentPost>
+                    {props.title}
+                </ContentPost>
             </Content>
+            <Hr/>
         </Wrap>
     )
 }

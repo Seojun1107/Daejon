@@ -24,7 +24,7 @@ const Wrap = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 2px 0 0 0;
-    z-index: 99999;
+    z-index: 4;
     
     @media (max-width: 699px){
         bottom: 0;

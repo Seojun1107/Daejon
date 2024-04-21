@@ -16,6 +16,7 @@ const Wrap = styled.div`
     top: 0;
     backdrop-filter: blur(10px);
     left: 0;
+    z-index: 3;
 `
 
 const ModalWrap = styled.div`
@@ -62,6 +63,7 @@ const Send = styled.button`
     border-radius: 15px;
     border: 0;
     float:right;
+    margin-left: 10px;
 `
 
 function PostWrite({block, nick, clickBtn}) {
@@ -81,8 +83,9 @@ function PostWrite({block, nick, clickBtn}) {
         .then((res) => {      
             setIp(res.data.IPv4)    
         })  
-    },[])
+    },[clickBtn])
 
+        
     // 글 작성 후 서버로 데이터를 전송하는 함수
     
     const SendPostData = async (ip, title, nick) => {
@@ -101,15 +104,16 @@ function PostWrite({block, nick, clickBtn}) {
       // Send 버튼 클릭 시 호출되는 함수
       const handleSendClick = () => {
         SendPostData(ip, title, nick);
+        setTitle("")
         clickBtn()
+
       };
 
     const textareaRef = useRef();
   
-    
     return (
         block ? (
-            <Wrap block={block}>
+            <Wrap block={block} >
                 <ModalWrap>
                     <Header>
                         <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
@@ -139,6 +143,7 @@ function PostWrite({block, nick, clickBtn}) {
                             />
                             <FontAwesomeIcon icon={faBarsStaggered} />
                             <Send onClick={handleSendClick}>작성하기</Send>
+                            <Send onClick={clickBtn}>취소</Send>
                         </Attach>
                     </Content>
                 </ModalWrap>

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PostView from "./Post/PostView";
+import data from "../data.json";
 
 const Wrap = styled.div`
     position: relative;
@@ -8,18 +9,20 @@ const Wrap = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    background-color: red;
     justify-content: center;
-    z-index: 1;
+    z-index: 3;
     top: 76px;
-`
+    padding: 10px;
+`;
 
 function Content(props) {
     return (
         <Wrap>
-            <PostView />
+            {data.map((post, index) => (
+                <PostView key={index} title={post.title} nick={post.nick} />
+            ))}
         </Wrap>
-    )
+    );
 }
 
-export default Content
+export default Content;
