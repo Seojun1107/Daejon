@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart as HeartOff} from "@fortawesome/free-regular-svg-icons";
+import { faHeart as HeartOn} from "@fortawesome/free-solid-svg-icons";
+import "./index.css"
 
 const Wrap = styled.div`
     width: 100%;
@@ -34,11 +38,19 @@ const Content = styled.div`
 const ContentPost = styled.p`
 
 `
+const Footer = styled.div`
+
+`
 const Hr = styled.hr`
     margin-top: 30px;
     width: 100%;
 `
 function PostView(props) {
+    const [color, setColor] = useState(false)
+
+    const changeHeartColor = () => {
+        setColor(!color)
+    }
     return (
         <Wrap>
             <Header>
@@ -52,6 +64,9 @@ function PostView(props) {
                     {props.title}
                 </ContentPost>
             </Content>
+            <Footer>
+                <FontAwesomeIcon icon={color === false ? HeartOff : HeartOn} onClick={changeHeartColor} style={color === false ? "" : {color:"red"}}/>
+            </Footer>
             <Hr/>
         </Wrap>
     )
