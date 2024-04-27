@@ -1,142 +1,143 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios"
-import "./index.css"
+import axios from "axios";
+import "./index.css";
 
-function PostWrite({block, nick, clickBtn}) {
-  // 상태 변수를 사용하여 내용과 포커스 상태를 관리합니다.
-    const [title, setTitle] = useState("");
-    const [file, setFile] = useState(null);
+function PostWrite({ block, nick, clickBtn }) {
+  const [title, setTitle] = useState("");
+  const [file, setFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기 상태 추가
+  const [ip, setIp] = useState();
 
-    // p 태그의 내용이 변경될 때마다 상태를 업데이트합니다.
-    const handleContentChange = (e) => {
-        setTitle(e.target.value);
-        textareaRef.current.style.height = 'auto'; // height 초기화
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    };
-    const [ ip , setIp ] = useState();
+  const handleContentChange = (e) => {
+    setTitle(e.target.value);
+    textareaRef.current.style.height = "auto"; // height 초기화
+    textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+  };
 
-    useEffect( () => {    
-        axios.get('https://geolocation-db.com/json/')    
-        .then((res) => {      
-            setIp(res.data.IPv4)    
-        })  
-    },[clickBtn])
+  // 이미지 파일 선택 시 미리보기 생성
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
 
-    const handleUpload = async () => {
-        if (!file) {
-            alert('이미지를 선택해주세요.');
-            return;
-        }
-    
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // 허용할 이미지 확장자 타입들
-        if (!allowedTypes.includes(file.type)) {
-            alert('이미지 파일(jpeg, png, gif)만 업로드 가능합니다.');
-            return;
-        }
-    
-        const formData = new FormData();
-        formData.append('image', file);
-    
-        try {
-            const res = await axios.post('http://localhost:4002/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(res.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    
-    // 글 작성 후 서버로 데이터를 전송하는 함수
-    
-    const SendPostData = async (ip, title, nick) => {
-        try {
-          const response = await axios.post("http://localhost:4002/post", {
-            ip,
-            title,
-            nick,
-          });
-          console.log(response.data); // 서버로부터의 응답 확인
-        } catch (error) {
-          console.error("Error sending data:", error);
-        }
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
       };
-    
-    // Send 버튼 클릭 시 호출되는 함수
-    const handleSendClick = () => {
-        handleUpload()
-        SendPostData(ip, title, nick);
-        setTitle("")
-        clickBtn()
-    };
-    
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-      };
-    
-      
-    const textareaRef = useRef();
-  
-    return (
-        block ? (
-            <Wrap block={block} encType='multipart/form-data'>
-                <ModalWrap>
-                    <Header>
-                        <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
-                        <Span>
-                            {nick}
-                        </Span>
-                    </Header>
-                    <Content>
-                        <textarea
-                            onChange={handleContentChange}
-                            style={{ 
-                                border: '0',
-                                minHeight: '16px',
-                                padding: '5px',
-                                color: 'initial',
-                                outline: 'none',
-                                resize: "none"
-                            }}
-                            value={title}
-                            ref={textareaRef}
-                            rows={1} // 시작 높이 설정
-                        >
-                        </textarea>
-                        <Attach>
+      reader.readAsDataURL(selectedFile);
+    } else {
+      setImagePreview(null);
+    }
+  };
 
-                            <input 
-                                type='file' 
-                                name='file' 
-                                id="file" 
-                                required 
-                                style={{display:"none"}} 
-                                onChange={handleFileChange}
-                            
-                                accept=".jpg,.jpeg,.png,.gif" // 허용할 확장자 지정
-                            />
-                            <label className="custom-file-label" htmlFor="file" >
-                                <FontAwesomeIcon 
-                                    icon={faImage} 
-                                    style={{marginRight: "10px", cursor:"pointer"}} 
-                                />
-                            </label>
-                            
-                            <FontAwesomeIcon icon={faBarsStaggered} />
-                            <Send onClick={handleSendClick} type='submit'>작성하기</Send>
-                            <Send onClick={clickBtn}>취소</Send>
-                        </Attach>
-                    </Content>
-                </ModalWrap>
-            </Wrap>
-        ) : null
-    )
+
+  useEffect(() => {
+    axios.get("https://geolocation-db.com/json/").then((res) => {
+      setIp(res.data.IPv4);
+    });
+  }, [clickBtn]);
+
+  const handleUpload = async () => {
+    if (!file) {
+      return;
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("이미지 파일(jpeg, png, gif)만 업로드 가능합니다.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axios.post("http://localhost:4002/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const SendPostData = async (ip, title, nick) => {
+    try {
+      const response = await axios.post("http://localhost:4002/post", {
+        ip,
+        title,
+        nick,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error sending data:", error);
+    }
+  };
+
+  const handleSendClick = () => {
+    handleUpload();
+    SendPostData(ip, title, nick);
+    setTitle("");
+    setFile(null); // 이미지 초기화
+    setImagePreview(null); // 이미지 미리보기 초기화
+    clickBtn();
+  };
+
+  const textareaRef = useRef();
+
+  return (
+    block ? (
+      <Wrap block={block} encType="multipart/form-data">
+        <ModalWrap>
+          <Header>
+            <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
+            <Span>{nick}</Span>
+          </Header>
+          <Content>
+            <textarea
+              onChange={handleContentChange}
+              style={{
+                border: "0",
+                minHeight: "16px",
+                padding: "5px",
+                color: "initial",
+                outline: "none",
+                resize: "none",
+              }}
+              value={title}
+              ref={textareaRef}
+              rows={1} // 시작 높이 설정
+            />
+            {imagePreview && <img src={imagePreview} alt="이미지 미리보기" style={{width:"40%"}}/>} {/* 이미지 미리보기 */}
+            <Attach>
+              <input
+                type="file"
+                name="file"
+                id="file"
+                required
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+                accept=".jpg,.jpeg,.png,.gif" // 허용할 확장자 지정
+              />
+              <label className="custom-file-label" htmlFor="file">
+                <FontAwesomeIcon icon={faImage} style={{ marginRight: "10px", cursor: "pointer" }} />
+              </label>
+              <FontAwesomeIcon icon={faBarsStaggered} />
+              <Send onClick={handleSendClick} type="submit">
+                작성하기
+              </Send>
+              <Send onClick={clickBtn}>취소</Send>
+            </Attach>
+          </Content>
+        </ModalWrap>
+      </Wrap>
+    ) : null
+  );
 }
 
 
