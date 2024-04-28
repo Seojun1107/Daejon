@@ -24,6 +24,7 @@ function App(props) {
 
     const [nick, setNick] = useState()
     const [on, setOn] = useState(false)
+    const [heart, setHeart] = useState(0)
     const clickBtn = () => {
         setOn(!on)
         console.log(on)
@@ -38,11 +39,9 @@ function App(props) {
         <Wrap>
             <Size>
                 <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
-                <Content>
-                    
-                </Content>
+                <Content setHeart={setHeart} heart={heart}/>
             </Size>
-            <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
+            <PostWrite clickBtn={clickBtn} block={on} nick={nick} />
         </Wrap>
     )
 }

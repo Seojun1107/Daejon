@@ -5,11 +5,12 @@ import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./index.css";
 
-function PostWrite({ block, nick, clickBtn }) {
+function PostWrite({ block, nick, clickBtn}) {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기 상태 추가
   const [ip, setIp] = useState();
+  const id = Date.now()
 
   const handleContentChange = (e) => {
     setTitle(e.target.value);
@@ -69,9 +70,10 @@ function PostWrite({ block, nick, clickBtn }) {
   const SendPostData = async (ip, title, nick) => {
     try {
       const response = await axios.post("http://localhost:4002/post", {
+        id,
         ip,
         title,
-        nick,
+        nick
       });
       console.log(response.data);
     } catch (error) {

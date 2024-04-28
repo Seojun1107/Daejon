@@ -29,19 +29,18 @@ function Content(props) {
     };
 
     fetchData(); // 페이지가 처음 로드될 때 데이터를 가져옴
-
     // 주기적으로 데이터를 업데이트하기 위한 타이머 설정 (예: 5초마다)
     const intervalId = setInterval(fetchData, 1000);
 
     return () => {
       clearInterval(intervalId); // 컴포넌트가 언마운트될 때 타이머 해제
-    };
+    }; 
   }, []); // 빈 배열을 전달하여 한 번만 실행되도록 설정
 
   return (
     <Wrap>
       {posts.map((post, index) => (
-        <PostView key={index} title={post.title} nick={post.nick} />
+        <PostView key={index} title={post.title} nick={post.nick} heart={post.heart} setHeart={props.setHeart}/>
       ))}
     </Wrap>
   );

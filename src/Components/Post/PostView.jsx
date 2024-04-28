@@ -42,8 +42,13 @@ const Footer = styled.div`
 
 `
 const Hr = styled.hr`
-    margin-top: 30px;
+    margin-top: 20px;
     width: 100%;
+`
+const HeartView = styled.span`
+    position: relative;
+    left: 10px;
+    color: gray;
 `
 function PostView(props) {
     const [color, setColor] = useState(false)
@@ -66,6 +71,7 @@ function PostView(props) {
             </Content>
             <Footer>
                 <FontAwesomeIcon icon={color === false ? HeartOff : HeartOn} onClick={changeHeartColor} style={color === false ? "" : {color:"red"}}/>
+                <HeartView >{props.heart === 0 ? "" : props.heart}</HeartView>
             </Footer>
             <Hr/>
         </Wrap>
