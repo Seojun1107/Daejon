@@ -40,7 +40,15 @@ function Content(props) {
   return (
     <Wrap>
       {posts.map((post, index) => (
-        <PostView key={index} index={post.index} title={post.title} nick={post.nick} heart={post.heart} setHeart={props.setHeart}/>
+        <PostView
+          key={index} 
+          index={post.index} 
+          title={post.title} 
+          nick={post.nick} 
+          heart={post.heart} 
+          setHeart={props.setHeart}
+          time={post.id}
+        />
       ))}
     </Wrap>
   );

@@ -7,9 +7,9 @@ import "./index.css";
 
 function PostWrite({ block, nick, clickBtn}) {
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기 상태 추가
+  const [files, setFiles] = useState([]);
   const [ip, setIp] = useState();
+  const [imagePreviews, setImagePreviews] = useState([]);
   const id = Date.now()
 
   const handleContentChange = (e) => {
@@ -20,18 +20,17 @@ function PostWrite({ block, nick, clickBtn}) {
 
   // 이미지 파일 선택 시 미리보기 생성
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-
-    if (selectedFile) {
+    const selectedFiles = Array.from(e.target.files); // 여러 파일 선택 가능
+    setFiles(selectedFiles);
+  
+    selectedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target.result);
+        // 이미지 미리보기 배열에 추가
+        setImagePreviews((prevPreviews) => [...prevPreviews, e.target.result]);
       };
-      reader.readAsDataURL(selectedFile);
-    } else {
-      setImagePreview(null);
-    }
+      reader.readAsDataURL(file);
+    });
   };
 
 
@@ -42,19 +41,23 @@ function PostWrite({ block, nick, clickBtn}) {
   }, [clickBtn]);
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!files.length) {
       return;
     }
-
+  
     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(file.type)) {
+    const validFiles = files.filter((file) => allowedTypes.includes(file.type));
+  
+    if (!validFiles.length) {
       alert("이미지 파일(jpeg, png, gif)만 업로드 가능합니다.");
       return;
     }
-
+  
     const formData = new FormData();
-    formData.append("image", file);
-
+    validFiles.forEach((file, index) => {
+      formData.append(`image${index}`, file); // 각 파일을 formData에 추가
+    });
+  
     try {
       const res = await axios.post("http://localhost:4002/upload", formData, {
         headers: {
@@ -81,13 +84,14 @@ function PostWrite({ block, nick, clickBtn}) {
     }
   };
 
-  const handleSendClick = () => {
+  const handleSendClick = (e) => {
     handleUpload();
     SendPostData(ip, title, nick);
     setTitle("");
-    setFile(null); // 이미지 초기화
-    setImagePreview(null); // 이미지 미리보기 초기화
+    setFiles([]); // 이미지 초기화
+    setImagePreviews([]); // 이미지 미리보기 초기화
     clickBtn();
+    e.preventDefault()
   };
 
   const textareaRef = useRef();
@@ -115,7 +119,13 @@ function PostWrite({ block, nick, clickBtn}) {
               ref={textareaRef}
               rows={1} // 시작 높이 설정
             />
-            {imagePreview && <img src={imagePreview} alt="이미지 미리보기" style={{width:"40%"}}/>} {/* 이미지 미리보기 */}
+            {imagePreviews.length > 0 && (
+              <PreviewImgDiv>
+                {imagePreviews.map((preview, index) => (
+                  <img key={index} src={preview} alt={`이미지 미리보기 ${index}`} />
+                ))}
+              </PreviewImgDiv>
+            )}
             <Attach>
               <input
                 type="file"
@@ -125,6 +135,7 @@ function PostWrite({ block, nick, clickBtn}) {
                 style={{ display: "none" }}
                 onChange={handleFileChange}
                 accept=".jpg,.jpeg,.png,.gif" // 허용할 확장자 지정
+                multiple
               />
               <label className="custom-file-label" htmlFor="file">
                 <FontAwesomeIcon icon={faImage} style={{ marginRight: "10px", cursor: "pointer" }} />
@@ -203,5 +214,12 @@ const Send = styled.button`
     float:right;
     margin-left: 10px;
 `
-
+const PreviewImgDiv = styled.div`
+  width: 100%;
+  height: 180px;
+  display: flex;
+  flex-direction: row;
+  overflow:scroll;
+  gap: 20px;
+`
 export default PostWrite
