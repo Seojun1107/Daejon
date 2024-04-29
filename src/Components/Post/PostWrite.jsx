@@ -55,7 +55,7 @@ function PostWrite({ block, nick, clickBtn}) {
   
     const formData = new FormData();
     validFiles.forEach((file, index) => {
-      formData.append(`image${index}`, file); // 각 파일을 formData에 추가
+      formData.append(`image`, file); // 각 파일을 formData에 추가
     });
   
     try {
@@ -88,8 +88,8 @@ function PostWrite({ block, nick, clickBtn}) {
     handleUpload();
     SendPostData(ip, title, nick);
     setTitle("");
-    setFiles([]); // 이미지 초기화
     setImagePreviews([]); // 이미지 미리보기 초기화
+    setFiles([]); // 이미지 초기화
     clickBtn();
     e.preventDefault()
   };
