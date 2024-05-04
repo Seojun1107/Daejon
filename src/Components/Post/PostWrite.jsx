@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./index.css";
+import data from "../../data.json"
 
 function PostWrite({ block, nick, clickBtn}) {
+  
   const [title, setTitle] = useState("");
   const [files, setFiles] = useState([]);
   const [ip, setIp] = useState();
   const [imagePreviews, setImagePreviews] = useState([]);
   const id = Date.now()
-
   const handleContentChange = (e) => {
     setTitle(e.target.value);
     textareaRef.current.style.height = "auto"; // height 초기화
@@ -35,7 +36,8 @@ function PostWrite({ block, nick, clickBtn}) {
 
 
   useEffect(() => {
-    axios.get("https://geolocation-db.com/json/").then((res) => {
+    
+    axios.get("http://geolocation-db.com/json/").then((res) => {
       setIp(res.data.IPv4);
     });
   }, [clickBtn]);
@@ -49,7 +51,7 @@ function PostWrite({ block, nick, clickBtn}) {
     const validFiles = files.filter((file) => allowedTypes.includes(file.type));
   
     if (!validFiles.length) {
-      alert("이미지 파일(jpeg, png, gif)만 업로드 가능합니다.");
+      alert("이미지 파일(jpg, jpeg, png, gif)만 업로드 가능합니다.");
       return;
     }
   
@@ -62,7 +64,8 @@ function PostWrite({ block, nick, clickBtn}) {
       const res = await axios.post("http://localhost:4002/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-        },
+          "Index": data.length === 0 ? 1 : data.length + 1
+        }
       });
       console.log(res.data);
     } catch (error) {
@@ -84,14 +87,14 @@ function PostWrite({ block, nick, clickBtn}) {
     }
   };
 
-  const handleSendClick = (e) => {
-    handleUpload();
+  const handleSendClick = async (e) => {
     SendPostData(ip, title, nick);
+    handleUpload();
     setTitle("");
     setImagePreviews([]); // 이미지 미리보기 초기화
     setFiles([]); // 이미지 초기화
     clickBtn();
-    e.preventDefault()
+    e.preventDefault();
   };
 
   const textareaRef = useRef();

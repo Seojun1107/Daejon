@@ -41,7 +41,7 @@ function App(props) {
                 <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
                 <Content setHeart={setHeart} heart={heart}/>
             </Size>
-            <PostWrite clickBtn={clickBtn} block={on} nick={nick} />
+            <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
         </Wrap>
     )
 }
