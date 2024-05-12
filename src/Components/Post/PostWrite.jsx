@@ -4,10 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./index.css";
-import database from "../../data.json"
 
 function PostWrite({ block, nick, clickBtn}) {
-  const [data, setData] = useState(database)
+  const [data, setData] = useState()
   const [title, setTitle] = useState("");
   const [files, setFiles] = useState([]);
   const [ip, setIp] = useState();
@@ -36,9 +35,19 @@ function PostWrite({ block, nick, clickBtn}) {
   };
 
   useEffect(() => {
-    setData(database);
-    console.log(data)
-  },[clickBtn, data])
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://ask.seojun.xyz/data.json');
+        const datas = await response.json();
+        setData(datas);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [clickBtn]);
+
   useEffect(() => {
     axios.get("https://geolocation-db.com/json/").then((res) => {
       setIp(res.data.IPv4);
