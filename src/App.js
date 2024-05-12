@@ -4,7 +4,12 @@ import Header from "./Components/Header"
 import Content from "./Components/Content"
 import PostWrite from "./Components/Post/PostWrite"
 import {createNickName} from "./Components/Utils/randomNick.js"
-
+import {
+    BrowserRouter,
+    Routes,
+    Route
+} from "react-router-dom";
+import ChatMain from "./Components/Chat/ChatMain.jsx"
 
 const Wrap = styled.div`
     position: relative;
@@ -19,6 +24,10 @@ const Size = styled.div`
     width: 1230px;
     justify-content: center;
     hegiht: 100%;
+    
+    @media (max-width: 699px){
+        width: 100%;
+    }
 `
 function App(props) {
 
@@ -27,22 +36,33 @@ function App(props) {
     const [heart, setHeart] = useState(0)
     const clickBtn = () => {
         setOn(!on)
-        console.log(on)
     }
 
     const HandleChangeNick = () => {
         setNick(createNickName())
-        console.log(nick)
     }
 
     return (
-        <Wrap>
-            <Size>
-                <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
-                <Content setHeart={setHeart} heart={heart}/>
-            </Size>
-            <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
-        </Wrap>
+
+        <BrowserRouter>
+            <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
+            <Routes>
+                <Route
+                    index
+                    element={
+                        <Wrap>
+                            <Size>
+                                <Content setHeart={setHeart} heart={heart}/>
+                            </Size>
+                            <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
+                        </Wrap>
+                    }
+                />
+                <Route path="Chat" element={<ChatMain/>} />
+            </Routes>
+        </BrowserRouter>
+
+        
     )
 }
 

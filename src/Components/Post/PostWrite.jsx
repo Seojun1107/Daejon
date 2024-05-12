@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./index.css";
-import data from "../../data.json"
+import database from "../../data.json"
 
 function PostWrite({ block, nick, clickBtn}) {
-  
+  const [data, setData] = useState(database)
   const [title, setTitle] = useState("");
   const [files, setFiles] = useState([]);
   const [ip, setIp] = useState();
@@ -21,23 +21,26 @@ function PostWrite({ block, nick, clickBtn}) {
 
   // 이미지 파일 선택 시 미리보기 생성
   const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files); // 여러 파일 선택 가능
+    const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
-  
+
+    const previews = [];
     selectedFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        // 이미지 미리보기 배열에 추가
-        setImagePreviews((prevPreviews) => [...prevPreviews, e.target.result]);
+        previews.push(e.target.result);
+        setImagePreviews([...previews]);
       };
       reader.readAsDataURL(file);
     });
   };
 
-
   useEffect(() => {
-    
-    axios.get("http://geolocation-db.com/json/").then((res) => {
+    setData(database);
+    console.log(data)
+  },[clickBtn, data])
+  useEffect(() => {
+    axios.get("https://geolocation-db.com/json/").then((res) => {
       setIp(res.data.IPv4);
     });
   }, [clickBtn]);
@@ -61,21 +64,25 @@ function PostWrite({ block, nick, clickBtn}) {
     });
   
     try {
-      const res = await axios.post("http://localhost:4002/upload", formData, {
+      const res = await axios.post("https://ask.seojun.xyz/upload", formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
-          "Index": data.length === 0 ? 1 : data.length + 1
+          "Content-Type": "multipart/form-data"
+        },
+        params: {
+          index: data.length === 0 ? 1 : data.length + 1
         }
       });
+      console.log(data)
       console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const SendPostData = async (ip, title, nick) => {
     try {
-      const response = await axios.post("http://localhost:4002/post", {
+      const response = await axios.post("https://ask.seojun.xyz/post", {
         id,
         ip,
         title,
@@ -88,13 +95,13 @@ function PostWrite({ block, nick, clickBtn}) {
   };
 
   const handleSendClick = async (e) => {
-    SendPostData(ip, title, nick);
-    handleUpload();
+    e.preventDefault();
+    await SendPostData(ip, title, nick);
+    await handleUpload();
     setTitle("");
     setImagePreviews([]); // 이미지 미리보기 초기화
     setFiles([]); // 이미지 초기화
     clickBtn();
-    e.preventDefault();
   };
 
   const textareaRef = useRef();
@@ -173,14 +180,16 @@ const Wrap = styled.form`
 
 const ModalWrap = styled.div`
     position: absolute;
-    width: 600px;
+    width: 80%; /* 상대적인 단위로 변경 */
+    max-width: 600px; /* 최대 너비 설정 */
     border-radius: 20px;
     background-color: white;
     top: 20%;
-    left: 30%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: white;
     padding: 30px;
-`
+`;
 const Header = styled.div`
     display: flex;
     width: 100%;
@@ -201,7 +210,6 @@ const Content = styled.div`
     width: 100%;
     height: 100%;
     font-size: 18px;
-    
 `
 
 const Attach = styled.div`
@@ -224,5 +232,11 @@ const PreviewImgDiv = styled.div`
   flex-direction: row;
   overflow:scroll;
   gap: 20px;
+
+  /* 스크롤 바 디자인 제거 */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
+  }
 `
 export default PostWrite

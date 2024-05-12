@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faMagnifyingGlass, faPenToSquare, faHeart, faBars, faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faMagnifyingGlass, faPenToSquare, faBars, faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
+import { Link } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from {
@@ -21,13 +23,16 @@ const Wrap = styled.div`
     width: 70%;
     height: 75px;
     backdrop-filter: blur(10px);
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 2px 0 0 0;
     z-index: 4;
     
     @media (max-width: 699px){
+        width: 100%;
+        background-color:white;
         bottom: 0;
+        backdrop-filter: none;
     }
 `
 
@@ -114,38 +119,45 @@ function Header(props) {
     }, []);
     
     return (
-        <Wrap>
-            <Left>
-                <a href="http://localhost:4002">
-                    <FontAwesomeIcon icon={faSchool} size="2xl" />
-                </a>
-            </Left>
-            <Center>
-                <Button>
-                    <FontAwesomeIcon icon={faHouse} size="2xl" />
-                </Button>
-                <Button>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} size="2xl" />
-                </Button>
-                <Button 
-                    onClick={() => {
-                        props.clickBtn()
-                        props.createNick()
-                    }}
-                > {/* 3번째 버튼 포스트 작성을 위해 props 제작 */}
-                    <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
-                </Button>
-                <Button>
-                    <FontAwesomeIcon icon={faHeart} size="2xl" />
-                </Button>
-            </Center>
-            <Right ref={rightRef}>  
-                <FontAwesomeIcon onClick={setClick2} icon={faBars} size="2xl" />
-                <Settings ref={settingRef} $setting={setting}>
-                    <Setting></Setting>
-                </Settings>
-            </Right>
-        </Wrap>
+        <div style={{
+            position: "relative",
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            justifyContent: "center"}}>
+            <Wrap>
+                <Left>
+                    <Link to="/">
+                        <FontAwesomeIcon icon={faSchool} size="2xl" />
+                    </Link>
+                </Left>
+                <Center>
+                    <Button>
+                        <FontAwesomeIcon icon={faHouse} size="2xl" />
+                    </Button>
+                    <Button>
+                        <FontAwesomeIcon icon={faMagnifyingGlass} size="2xl" />
+                    </Button>
+                    <Button 
+                        onClick={() => {
+                            props.clickBtn()
+                            props.createNick()
+                        }}
+                    > {/* 3번째 버튼 포스트 작성을 위해 props 제작 */}
+                        <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
+                    </Button>
+                    <Button>
+                        <FontAwesomeIcon icon={faRocketchat} size="2xl"/>
+                    </Button>
+                </Center>
+                <Right ref={rightRef}>  
+                    <FontAwesomeIcon onClick={setClick2} icon={faBars} size="2xl" />
+                    <Settings ref={settingRef} $setting={setting}>
+                        <Setting></Setting>
+                    </Settings>
+                </Right>
+            </Wrap>
+        </div>
     );
 }
 

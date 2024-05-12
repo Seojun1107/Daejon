@@ -42,7 +42,7 @@ const Content = styled.div`
     
 `
 const ContentPost = styled.p`
-
+    display: inline-block;
 `
 const Footer = styled.div`
 
@@ -56,6 +56,21 @@ const HeartView = styled.span`
     left: 10px;
     color: gray;
 `
+
+const ImageWrap = styled.div`
+    width: 100%;
+    height: 180px;
+    display: flex;
+    flex-direction: row;
+    overflow:scroll;
+    gap: 20px;
+    /* 스크롤 바 디자인 제거 */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari */
+    }
+    margin-bottom: 10px;
+`
 function PostView(props) {
     const [color, setColor] = useState(false)
 
@@ -63,7 +78,7 @@ function PostView(props) {
         try {
             setColor(!color);
             // 서버로 요청을 보냄
-            await axios.post("http://localhost:4002/update-heart", {
+            await axios.post("https://ask.seojun.xyz/update-heart", {
                 index: props.index, // 포스트의 고유 식별자 전달
                 action: color ? "unlike" : "like" // 하트 클릭 여부에 따라 다른 액션 전달
             });
@@ -111,6 +126,14 @@ function PostView(props) {
                 <ContentPost>
                     {props.title}
                 </ContentPost>
+                {props.images.length > 0 && (
+                    <ImageWrap>
+                        {props.images.map((preview, index) => (
+                            
+                            <img key={index} src={`/uploads/${preview}`} alt={`이미지 미리보기 ${index}`} />
+                        ))}
+                    </ImageWrap>
+                )}
             </Content>
             <Footer>
                 <FontAwesomeIcon
