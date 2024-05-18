@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PostView from "./Post/PostView";
-import axios from "axios";
 
 const Wrap = styled.div`
   position: relative;
@@ -12,7 +11,7 @@ const Wrap = styled.div`
   justify-content: center;
   z-index: 3;
   top: 76px;
-  padding: 10px;
+  padding-right: 10px;
   margin: 0 auto; /* 중앙 정렬을 위해 추가 */
 
   @media (max-width: 699px) { 
@@ -25,20 +24,14 @@ function Content(props) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://ask.seojun.xyz/data.json");
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
+    const ws = new WebSocket("wss://ask.seojun.xyz");
+
+    ws.onmessage = (event) => {
+      setPosts(JSON.parse(event.data));
     };
 
-    fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-
     return () => {
-      clearInterval(intervalId);
+      ws.close();
     };
   }, []);
 

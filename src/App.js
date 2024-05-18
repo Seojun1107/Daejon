@@ -10,6 +10,7 @@ import {
     Route
 } from "react-router-dom";
 import ChatMain from "./Components/Chat/ChatMain.jsx"
+import MealMain from "./Components/Meal/MealMain.jsx"
 
 const Wrap = styled.div`
     position: relative;
@@ -33,9 +34,13 @@ function App(props) {
 
     const [nick, setNick] = useState()
     const [on, setOn] = useState(false)
+    const [reportset, setReportset] = useState(false)
     const [heart, setHeart] = useState(0)
     const clickBtn = () => {
         setOn(!on)
+    }
+    const ClickReportBtn = () => {
+        setReportset(!reportset)
     }
 
     const HandleChangeNick = () => {
@@ -43,9 +48,8 @@ function App(props) {
     }
 
     return (
-
         <BrowserRouter>
-            <Header  clickBtn={clickBtn} createNick={HandleChangeNick}/>
+            <Header block={on} clickBtn={clickBtn} createNick={HandleChangeNick} reportset={reportset} ClickReportBtn={ClickReportBtn}/>
             <Routes>
                 <Route
                     index
@@ -59,6 +63,7 @@ function App(props) {
                     }
                 />
                 <Route path="Chat" element={<ChatMain/>} />
+                <Route path="Meal" element={<MealMain/>} />
             </Routes>
         </BrowserRouter>
 

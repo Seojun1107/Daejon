@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faMagnifyingGlass, faPenToSquare, faBars, faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faPenToSquare, faBars, faSchool, faUtensils} from "@fortawesome/free-solid-svg-icons";
 import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
 import { Link } from 'react-router-dom';
@@ -132,11 +132,15 @@ function Header(props) {
                     </Link>
                 </Left>
                 <Center>
+                    <Link to="/">
+                        <Button>
+                            <FontAwesomeIcon icon={faHouse} size="2xl" />
+                        </Button>
+                    </Link>
                     <Button>
-                        <FontAwesomeIcon icon={faHouse} size="2xl" />
-                    </Button>
-                    <Button>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} size="2xl" />
+                        <Link to="/Meal">
+                            <FontAwesomeIcon icon={faUtensils} size="2xl"/>
+                        </Link>
                     </Button>
                     <Button 
                         onClick={() => {
@@ -147,7 +151,9 @@ function Header(props) {
                         <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
                     </Button>
                     <Button>
-                        <FontAwesomeIcon icon={faRocketchat} size="2xl"/>
+                        <Link to="/Chat">
+                            <FontAwesomeIcon icon={faRocketchat} size="2xl"/>
+                        </Link>
                     </Button>
                 </Center>
                 <Right ref={rightRef}>  

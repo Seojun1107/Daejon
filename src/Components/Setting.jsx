@@ -12,20 +12,30 @@ const Wrap = styled.div`
     flex-direction: column;
     background-color: white;
     border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
 `
-const ThemeWrap = styled.div`
+const Component = styled.div`
     display: flex;
-
+    padding: 13px 0px 13px 10px;
+    border-bottom: 0.5px solid gray;
+    text-decoration-line: none;
 `
-const ReportWrap = styled.div`
-    diaplay: flex;
+const Move = styled.a`
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
 `
-
-function Setting(props) {
+function Setting(ClickReportBtn) {
     return (
         <Wrap>
-            <ThemeWrap ></ThemeWrap>
-            <ReportWrap></ReportWrap>
+            <Component >테마 설정</Component>
+            <Component
+            >
+                    버그 신고
+                </Component>
+            <Component><Move href="https://seojun1107.notion.site/8bd346467abb4c8d8739a426b53e0612?pvs=4">개인정보 처리방침</Move></Component>
         </Wrap>
     )
 }
