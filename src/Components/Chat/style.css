@@ -1,0 +1,143 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+.wrap{
+    -ms-overflow-style: none;
+ }
+.wrap::-webkit-scrollbar{
+    display:none;
+ }
+
+/* .center is the fixed background container */
+.center {
+    position: fixed;
+    max-width: 620px;
+    margin: 0 auto;
+    top: 75px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align items at the bottom */
+    background-color: #A8C0D6;
+}
+
+/* .wrap is the scrollable content container */
+.wrap {
+    position: relative;
+    max-width: 620px;
+    width: 100%;
+    padding: 0 20px 70px 20px;
+    overflow-y: auto;
+    max-height: 100vh; /* Ensures the content is scrollable */
+}
+
+
+.wrap .chat {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.wrap .chat .icon {
+    position: relative;
+    overflow: hidden;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #eee;
+}
+
+.wrap .chat .icon i {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    font-size: 2.5rem;
+    color: #aaa;
+    transform: translateX(-50%);
+}
+
+.wrap .chat .textbox {
+    position: relative;
+    display: inline-block;
+    max-width: calc(100% - 70px);
+    padding: 10px;
+    margin-top: 7px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+.wrap .chat .textbox::before {
+    position: absolute;
+    display: block;
+    top: 0;
+    font-size: 1.5rem;
+}
+
+.wrap .ch1 .textbox {
+    margin-left: 20px;
+    background-color: #ddd;
+}
+
+.wrap .ch1 .textbox::before {
+    left: -15px;
+    content: "◀";
+    color: #ddd;
+}
+
+.wrap .ch2 {
+    flex-direction: row-reverse;
+}
+
+.wrap .ch2 .textbox {
+    margin-right: 20px;
+    background-color: #F9EB54;
+}
+
+.wrap .ch2 .textbox::before {
+    right: -15px;
+    content: "▶";
+    color: #F9EB54;
+}
+.send {
+    position: fixed;
+    max-width: 620px;
+    margin: 0 auto;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    padding: 10px;
+    bottom: 0; /* Ensure it stays at the bottom */
+    align-items: center; /* Center content vertically */
+}
+
+.send > input {
+    flex: 1; /* Allow the input to take up available space */
+    outline: none;
+    border: 1px solid #ccc; /* Optional: Border for input */
+    padding: 10px; /* Padding inside input */
+    border-radius: 30px; /* Rounded corners */
+    padding-right: 50px; /* Space for the button */
+}
+
+.send > button {
+    position: absolute;
+    right: 20px; /* Position it inside the input */
+    height: 40px; /* Adjust height as needed */
+    width: 40px; /* Adjust width as needed */
+    border: 0;
+    background-color: transparent; /* Remove button background */
+    cursor: pointer; /* Change cursor to pointer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}

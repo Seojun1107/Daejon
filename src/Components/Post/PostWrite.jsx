@@ -233,6 +233,7 @@ const Send = styled.button`
     border: 0;
     float:right;
     margin-left: 10px;
+    cursor: pointer;
 `
 const PreviewImgDiv = styled.div`
   width: 100%;
