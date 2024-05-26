@@ -32,12 +32,17 @@ a {
 
 /* .wrap is the scrollable content container */
 .wrap {
+
+    display: flex;
+    flex-direction: column;
     position: relative;
+    top: -75px;
     max-width: 620px;
     width: 100%;
-    padding: 0 20px 70px 20px;
+    padding: 0 20px 20px 20px;
     overflow-y: auto;
-    max-height: 100vh; /* Ensures the content is scrollable */
+    max-height: calc(100vh); 
+
 }
 
 
@@ -140,4 +145,29 @@ a {
     align-items: center;
     justify-content: center;
     outline: none;
+}
+
+.loadingWrap {
+    
+    position: fixed;
+    max-width: 620px;
+    margin: 0 auto;
+    top: 75px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align items at the bottom */
+    
+}
+
+.loading {
+    position: relative;
+    max-height: 100vh; /* Ensures the content is scrollable */
+}
+
+.waiting {
+    margin-bottom: 20px;
+    font-size: 1.5em; /* Example font size */
 }

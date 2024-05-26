@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import io from "socket.io-client";
 import PostView from "./Post/PostView";
 
 const Wrap = styled.div`
@@ -24,14 +25,14 @@ function Content(props) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const ws = new WebSocket("wss://ask.seojun.xyz");
+    const socket = io("wss://ask.seojun.xyz");
 
-    ws.onmessage = (event) => {
-      setPosts(JSON.parse(event.data));
-    };
+    socket.on("posts", (data) => {
+      setPosts(data);
+    });
 
     return () => {
-      ws.close();
+      socket.disconnect();
     };
   }, []);
 

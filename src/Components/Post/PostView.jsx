@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as HeartOff} from "@fortawesome/free-regular-svg-icons";
@@ -43,6 +43,7 @@ const Content = styled.div`
 `
 const ContentPost = styled.p`
     display: inline-block;
+    margin: 5px 0px 5px 0px;
 `
 const Footer = styled.div`
 
