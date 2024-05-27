@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as HeartOff} from "@fortawesome/free-regular-svg-icons";
@@ -83,7 +83,6 @@ function PostView(props) {
                 index: props.index, // 포스트의 고유 식별자 전달
                 action: color ? "unlike" : "like" // 하트 클릭 여부에 따라 다른 액션 전달
             });
-            console.log(props.index)
         } catch (error) {
             console.error("Error updating heart:", error);
         }

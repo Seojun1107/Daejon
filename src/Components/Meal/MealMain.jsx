@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import AddSchool from "./AddSchool";
 
 
 function MealMain(props) {
     return (
         <Wrap>
-            
+          <AddSchool/>
         </Wrap>
     )
 }
@@ -21,6 +22,7 @@ const Wrap = styled.div`
   top: 76px;
   padding: 10px;
   margin: 0 auto; /* 중앙 정렬을 위해 추가 */
+  //background-color: gray;
 
   @media (max-width: 699px) { 
     width: 100%;
