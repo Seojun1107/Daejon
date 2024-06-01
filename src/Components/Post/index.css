@@ -11,3 +11,13 @@ textarea {
     height: 100%;
     resize: none;
 }
+.report-icon {
+  
+  position: relative;
+  top: 10px;
+  left: 10px;
+  
+}
+.report-icon:hover {
+  color: red;
+}

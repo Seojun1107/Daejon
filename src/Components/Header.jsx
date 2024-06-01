@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faPenToSquare, faBars, faSchool, faUtensils} from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faPenToSquare, faBars, faSchool, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
 import { Link } from 'react-router-dom';
@@ -15,7 +15,7 @@ const fadeIn = keyframes`
     opacity: 1;
     transform: scale(1);
   }
-`
+`;
 
 const Wrap = styled.div`
     position: fixed;
@@ -34,14 +34,14 @@ const Wrap = styled.div`
         bottom: 0;
         backdrop-filter: none;
     }
-`
+`;
 
 const Left = styled.div`
     position: relative;
     @media (max-width: 699px){
         display: none;
     }
-`
+`;
 
 const Center = styled.div`
     display: flex;
@@ -49,7 +49,8 @@ const Center = styled.div`
         position: absolute;
         justify-content: start;
     }
-`
+`;
+
 const Button = styled.div`
     margin: 0 1px;
     padding: 20px 30px;
@@ -61,7 +62,8 @@ const Button = styled.div`
             background-color: rgba(245,245,245, 0.7);
         }
     }
-`
+`;
+
 const Right = styled.div`
     position: relative;
     right: 0;
@@ -71,7 +73,8 @@ const Right = styled.div`
         right: 20px;
         bottom: auto;
     }
-`
+`;
+
 const Settings = styled.div`
     position: absolute;
     width: 170px;
@@ -89,14 +92,14 @@ const Settings = styled.div`
         right: 0;
         bottom: auto;
     }
-`
+`;
 
 function Header(props) {
     const [setting, setSetting] = useState(false);
     const settingRef = useRef(null);
     const rightRef = useRef(null);
 
-    const setClick2 = () => {
+    const toggleSettings = () => {
         setSetting(!setting);
     };
 
@@ -117,14 +120,15 @@ function Header(props) {
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
-    
+
     return (
         <div style={{
             position: "relative",
             display: "flex",
             width: "100%",
             height: "100%",
-            justifyContent: "center"}}>
+            justifyContent: "center"
+        }}>
             <Wrap>
                 <Left>
                     <Link to="/">
@@ -139,27 +143,27 @@ function Header(props) {
                     </Link>
                     <Button>
                         <Link to="/Meal">
-                            <FontAwesomeIcon icon={faUtensils} size="2xl"/>
+                            <FontAwesomeIcon icon={faUtensils} size="2xl" />
                         </Link>
                     </Button>
                     <Button 
                         onClick={() => {
-                            props.clickBtn()
-                            props.createNick()
+                            props.clickBtn();
+                            props.createNick();
                         }}
-                    > {/* 3번째 버튼 포스트 작성을 위해 props 제작 */}
+                    >
                         <FontAwesomeIcon icon={faPenToSquare} size="2xl" />
                     </Button>
                     <Button>
                         <Link to="/Chat">
-                            <FontAwesomeIcon icon={faRocketchat} size="2xl"/>
+                            <FontAwesomeIcon icon={faRocketchat} size="2xl" />
                         </Link>
                     </Button>
                 </Center>
                 <Right ref={rightRef}>  
-                    <FontAwesomeIcon onClick={setClick2} icon={faBars} size="2xl" />
+                    <FontAwesomeIcon onClick={toggleSettings} icon={faBars} size="2xl" />
                     <Settings ref={settingRef} $setting={setting}>
-                        <Setting></Setting>
+                        <Setting preventClose={(e) => e.stopPropagation()} />
                     </Settings>
                 </Right>
             </Wrap>

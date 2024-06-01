@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { CSSTransition } from "react-transition-group";
+import "./AddSchool.css";
 
 const Wrap = styled.div`
     width: 100%;
@@ -72,7 +74,7 @@ function AddSchool(props) {
     const [schoolInfo, setSchoolInfo] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [showList, setShowList] = useState(true);
+    const [showList, setShowList] = useState(!(localStorage.getItem('SD_SCHUL_CODE') && localStorage.getItem('ATPT_OFCDC_SC_CODE')));
     const [SD_SCHUL_CODE, setSD_SCHUL_CODE] = useState(localStorage.getItem('SD_SCHUL_CODE') || "");
     const [ATPT_OFCDC_SC_CODE, setATPT_OFCDC_SC_CODE] = useState(localStorage.getItem('ATPT_OFCDC_SC_CODE') || "");
     const [meal, setMeal] = useState();
@@ -105,7 +107,6 @@ function AddSchool(props) {
             })
             .catch(error => {
                 console.log(error);
-                setError(error.message);
                 setLoading(false);
             });
         }, 500);
@@ -131,17 +132,22 @@ function AddSchool(props) {
             }
         })
         .then(response => {
-            const mealData = response.data.mealServiceDietInfo[1].row[0];
-            setMeal(mealData);
+            if (response.data.mealServiceDietInfo && response.data.mealServiceDietInfo[1]) {
+                const mealData = response.data.mealServiceDietInfo[1].row[0];
+                setMeal(mealData);
+            } else {
+                setMeal(null);
+                setError("해당하는 급식데이터가 없습니다.");
+            }
         })
         .catch(error => {
             console.log(error);
-            setError(error.message);
         });
     }
 
     const handleChangeSchool = () => {
-        setMeal(null);
+        setMeal();
+        setError();
         setShowList(true);
         setSchoolName("");
         localStorage.removeItem('SD_SCHUL_CODE');
@@ -157,17 +163,26 @@ function AddSchool(props) {
         localStorage.setItem('ATPT_OFCDC_SC_CODE', school.ATPT_OFCDC_SC_CODE);
         setShowList(false);
         fetchMeal();
-        
     }
 
     return (
         <Wrap>
-            <H1>현재 재학중인<br />학교를 입력해주세요!</H1>
-            <Input 
-                type="text" 
-                value={schoolName} 
-                onChange={(e) => setSchoolName(e.target.value)}
-            />
+            <CSSTransition
+                in={showList}
+                timeout={300}
+                classNames="fade"
+                unmountOnExit
+            >
+                <div>
+                    <H1>현재 재학중인<br />학교를 입력해주세요!</H1>
+                    <Input 
+                        type="text" 
+                        value={schoolName} 
+                        onChange={(e) => setSchoolName(e.target.value)}
+                    />
+                </div>
+            </CSSTransition>
+            
             {loading && <p>로딩중...</p>}
             {schoolInfo && showList && (
                 <Ul>
@@ -179,12 +194,20 @@ function AddSchool(props) {
                     ))}
                 </Ul>
             )}
-            {meal && (
+            {meal ? (
                 <MealDiv>
                     <h3>오늘의 급식</h3>
                     <button onClick={handleChangeSchool}>학교 변경</button>
                     <p dangerouslySetInnerHTML={{ __html: meal.DDISH_NM.replace(/<br\/>/g, '<br/>') }} />
                 </MealDiv>
+            ) : (
+                error && (
+                    <MealDiv>
+                        <h3>오늘의 급식</h3>
+                        <button onClick={handleChangeSchool}>학교 변경</button>
+                        <p>{error}</p>
+                    </MealDiv>
+                )
             )}
         </Wrap>
     );

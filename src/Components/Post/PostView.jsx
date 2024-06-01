@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as HeartOff} from "@fortawesome/free-regular-svg-icons";
-import { faHeart as HeartOn} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as HeartOn, faBan} from "@fortawesome/free-solid-svg-icons";
 import "./index.css"
 import axios from "axios";
+import ViewReport from "./ViewReport";
 
 const Wrap = styled.div`
     width: 100%;
@@ -72,8 +73,16 @@ const ImageWrap = styled.div`
     }
     margin-bottom: 10px;
 `
+const Report = styled.div`
+    
+    &:hover {
+        color: red;
+    }
+`
+
 function PostView(props) {
     const [color, setColor] = useState(false)
+    const [report, setReport] = useState()
 
     const changeHeartColor = async () => {
         try {
@@ -106,6 +115,9 @@ function PostView(props) {
 		return `${Math.floor(years)}년 전`;
 	};
 	
+    const clickReport = () => {
+        setReport(!report)
+    }
 	//api에 있는 detailPost.createdAt를 바꿔주는 것
 	const nowDate = detailDate(new Date(props.time));
 
@@ -121,6 +133,10 @@ function PostView(props) {
                         {nowDate}
                     </Span>
                 </SpanWrap>
+                <Report>
+                    <FontAwesomeIcon icon={faBan} className="report-icon" onClick={clickReport}/>
+                    {report === true ? <ViewReport setReport={setReport} /> : undefined}
+                </Report>
             </Header>
             <Content>
                 <ContentPost>
