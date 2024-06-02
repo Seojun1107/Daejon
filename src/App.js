@@ -64,6 +64,7 @@ function App(props) {
                 />
                 <Route path="Chat" element={<ChatMain/>} />
                 <Route path="Meal" element={<MealMain/>} />
+                <Route path="admin" element={<MealMain/>} />
             </Routes>
         </BrowserRouter>
 
