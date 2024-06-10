@@ -12,6 +12,7 @@ const Wrap = styled.div`
   justify-content: center;
   z-index: 3;
   top: 76px;
+  padding-left: 10px;
   padding-right: 10px;
   margin: 0 auto; /* 중앙 정렬을 위해 추가 */
 
@@ -28,7 +29,7 @@ function Content(props) {
     const socket = io("wss://ask.seojun.xyz");
 
     socket.on("posts", (data) => {
-      setPosts(data);
+      setPosts(data.reverse());
     });
 
     return () => {

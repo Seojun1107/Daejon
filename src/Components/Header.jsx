@@ -6,6 +6,23 @@ import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
 import { Link,useNavigate } from 'react-router-dom';
 
+const BackgroundWrap = styled.div`
+
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 75px;
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    z-index: 4;
+    
+    @media (max-width: 699px){
+        width: 100%;
+        background-color:white;
+        bottom: 0;
+        backdrop-filter: none;
+    }
+`
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -18,22 +35,12 @@ const fadeIn = keyframes`
 `;
 
 const Wrap = styled.div`
-    position: fixed;
     display: flex;
     width: 70%;
-    height: 75px;
-    backdrop-filter: blur(10px);
+    height: 100%;
     align-items: center;
     justify-content: space-between;
     padding: 2px 0 0 0;
-    z-index: 4;
-    
-    @media (max-width: 699px){
-        width: 100%;
-        background-color:white;
-        bottom: 0;
-        backdrop-filter: none;
-    }
 `;
 
 const Left = styled.div`
@@ -122,13 +129,7 @@ function Header(props) {
     }, []);
 
     return (
-        <div style={{
-            position: "relative",
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            justifyContent: "center"
-        }}>
+        <BackgroundWrap>
             <Wrap>
                 <Left>
                     <Link to="/">
@@ -168,7 +169,7 @@ function Header(props) {
                     </Settings>
                 </Right>
             </Wrap>
-        </div>
+        </BackgroundWrap>
     );
 }
 
