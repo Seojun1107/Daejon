@@ -1,23 +1,22 @@
-
 .PostWriteUser {
-    width: 40px;
-    border-radius: 50%;
-    border: 1px solid gray;
-  
-  }
+  width: 40px;
+  border-radius: 50%;
+  border: 1px solid gray;
+}
 
 textarea {
-    width: 100%;
-    height: 100%;
-    resize: none;
+  width: 100%; /* Adjusted width to accommodate the icon */
+  height: 100%;
+  resize: none;
 }
+
 .report-icon {
-  
-  position: relative;
-  top: 10px;
-  left: 10px;
-  
+  position: absolute; /* Changed to absolute positioning */
+  top: 0;
+  right: 0; /* Positioned at the top right corner */
+  cursor: pointer;
 }
+
 .report-icon:hover {
   color: red;
 }

@@ -19,6 +19,9 @@ const Component = styled.div`
     border-bottom: 0.5px solid gray;
     text-decoration-line: none;
     cursor: pointer;
+    &:last-child {
+        border-bottom: 0;
+    }
 `;
 
 const Move = styled.a`
@@ -64,8 +67,7 @@ function Setting({ preventClose }) {
                 </div>
             ) : (
                 <>
-                    <Component onClick={() => setShowThemeSettings(true)}>테마설정</Component>
-                    <Component>버그 신고</Component>
+                    <Component><a href="mailto:psm23011511@gmail.com" style={{color:"black"}}>문의</a></Component>
                     <Component>
                         <Move href="https://seojun1107.notion.site/8bd346467abb4c8d8739a426b53e0612?pvs=4">개인정보 처리방침</Move>
                     </Component>

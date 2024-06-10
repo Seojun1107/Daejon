@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import ChatMain from "./Components/Chat/ChatMain.jsx"
 import MealMain from "./Components/Meal/MealMain.jsx"
+import AdminMain from "./Components/Admin/Index.jsx"
 
 const Wrap = styled.div`
     position: relative;
@@ -60,11 +61,11 @@ function App(props) {
                             </Size>
                             <PostWrite clickBtn={clickBtn} block={on} nick={nick}/>
                         </Wrap>
-                    }
+                    } 
                 />
                 <Route path="Chat" element={<ChatMain/>} />
                 <Route path="Meal" element={<MealMain/>} />
-                <Route path="admin" element={<MealMain/>} />
+                <Route path="admin" element={<AdminMain/>} />
             </Routes>
         </BrowserRouter>
 

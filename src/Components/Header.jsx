@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faPenToSquare, faBars, faSchool, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from {
@@ -78,7 +78,6 @@ const Right = styled.div`
 const Settings = styled.div`
     position: absolute;
     width: 170px;
-    height: 271px;
     bottom: 50px;
     right: 0px;
     border-radius: 10px;
@@ -95,6 +94,7 @@ const Settings = styled.div`
 `;
 
 function Header(props) {
+    const navigate = useNavigate();
     const [setting, setSetting] = useState(false);
     const settingRef = useRef(null);
     const rightRef = useRef(null);
@@ -148,6 +148,7 @@ function Header(props) {
                     </Button>
                     <Button 
                         onClick={() => {
+                            navigate(`/`);
                             props.clickBtn();
                             props.createNick();
                         }}
