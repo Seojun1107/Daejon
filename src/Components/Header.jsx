@@ -4,10 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faPenToSquare, faBars, faSchool, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
 import Setting from "./Setting";
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const BackgroundWrap = styled.div`
-
     position: fixed;
     display: flex;
     width: 100%;
@@ -16,13 +15,16 @@ const BackgroundWrap = styled.div`
     justify-content: center;
     z-index: 4;
     
-    @media (max-width: 699px){
+    @media (max-width: 699px) {
         width: 100%;
-        background-color:white;
+        background-color: white;
         bottom: 0;
         backdrop-filter: none;
+        height: 60px; /* Adjust the height for mobile */
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Add shadow for a more premium look */
     }
-`
+`;
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -41,20 +43,28 @@ const Wrap = styled.div`
     align-items: center;
     justify-content: space-between;
     padding: 2px 0 0 0;
+
+    @media (max-width: 699px) {
+        width: 100%;
+        justify-content: space-evenly;
+    }
 `;
 
 const Left = styled.div`
     position: relative;
-    @media (max-width: 699px){
+
+    @media (max-width: 699px) {
         display: none;
     }
 `;
 
 const Center = styled.div`
     display: flex;
-    @media (max-width: 699px){
-        position: absolute;
-        justify-content: start;
+
+    @media (max-width: 699px) {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
     }
 `;
 
@@ -64,10 +74,16 @@ const Button = styled.div`
     border-radius: 10px;
     transition: 0.3s;
 
-    @media (min-width: 700px){
+    @media (min-width: 700px) {
         &:hover {
-            background-color: rgba(245,245,245, 0.7);
+            background-color: rgba(245, 245, 245, 0.7);
         }
+    }
+
+    @media (max-width: 699px) {
+        margin: 0;
+        padding: 10px 15px; /* Adjust padding for mobile */
+        text-align: center; /* Center align text */
     }
 `;
 
@@ -76,6 +92,7 @@ const Right = styled.div`
     right: 0;
 
     @media (max-width: 700px) {
+        display: none;
         position: fixed;
         right: 20px;
         bottom: auto;
@@ -88,7 +105,7 @@ const Settings = styled.div`
     bottom: 50px;
     right: 0px;
     border-radius: 10px;
-    box-shadow: 0 10.5px 21px rgba(0,0,0, 0.08);
+    box-shadow: 0 10.5px 21px rgba(0, 0, 0, 0.08);
     display: ${(props) => (props.$setting === false ? "none" : "block")};
     animation: ${fadeIn} 0.3s ease-in-out; /* 애니메이션 적용 */
     border: 0.5px solid #eee;

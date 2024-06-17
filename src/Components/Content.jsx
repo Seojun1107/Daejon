@@ -19,6 +19,7 @@ const Wrap = styled.div`
   @media (max-width: 699px) { 
     width: 100%;
     top: 0;
+    padding-bottom: 75px;
   }
 `;
 
