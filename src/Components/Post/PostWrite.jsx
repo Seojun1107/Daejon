@@ -5,6 +5,7 @@ import { faImage, faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import badWords from '../Utils/badWord.json';
 import "./index.css";
+import Captcha from "../Utils/Captcha";
 
 function PostWrite({ block, nick, clickBtn }) {
   const [data, setData] = useState([]);
@@ -14,6 +15,8 @@ function PostWrite({ block, nick, clickBtn }) {
   const [imagePreviews, setImagePreviews] = useState([]);
   const id = Date.now();
   const textareaRef = useRef();
+  const [write, setWrite] = useState(true);
+  const [showCaptcha, setShowCaptcha] = useState(false);
 
   const handleContentChange = (e) => {
     setTitle(e.target.value);
@@ -64,6 +67,7 @@ function PostWrite({ block, nick, clickBtn }) {
   const containsBadWords = (text) => {
     return badWords.some(badWord => text.toLowerCase().includes(badWord.toLowerCase()));
   };
+
   const handleUpload = async (postIndex) => {
     if (!files.length) return;
 
@@ -119,65 +123,83 @@ function PostWrite({ block, nick, clickBtn }) {
     }
   };
 
-  const handleSendClick = async (e) => {
+  const handleSendClick = (e) => {
     e.preventDefault();
+    setShowCaptcha(true);
+  };
+
+  const handleCaptchaVerify = async () => {
+    setShowCaptcha(false);
     await sendPostData();
   };
 
   return (
-    block ? (
-      <Wrap block={block} encType="multipart/form-data">
-        <ModalWrap>
-          <Header>
-            <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
-            <Span>{nick}</Span>
-          </Header>
-          <Content>
-            <textarea
-              onChange={handleContentChange}
-              style={{
-                border: "0",
-                minHeight: "16px",
-                padding: "5px",
-                color: "initial",
-                outline: "none",
-                resize: "none",
-              }}
-              value={title}
-              ref={textareaRef}
-              rows={1}
-              placeholder="내용을 입력하세요..."
-            />
-            {imagePreviews.length > 0 && (
-              <PreviewImgDiv>
-                {imagePreviews.map((preview, index) => (
-                  <img key={index} src={preview} alt={`이미지 미리보기 ${index}`} />
-                ))}
-              </PreviewImgDiv>
-            )}
-            <Attach>
-              <input
-                type="file"
-                name="file"
-                id="file"
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-                accept=".jpg,.jpeg,.png,.gif"
-                multiple
+    write === true ? (
+      block ? (
+        <Wrap block={block} encType="multipart/form-data">
+          <ModalWrap>
+            <Header>
+              <Image className="PostWriteUser" src="./user.png" alt="익명유저아이콘" />
+              <Span>{nick}</Span>
+            </Header>
+            <Content>
+              <textarea
+                onChange={handleContentChange}
+                style={{
+                  border: "0",
+                  minHeight: "16px",
+                  padding: "5px",
+                  color: "initial",
+                  outline: "none",
+                  resize: "none",
+                }}
+                value={title}
+                ref={textareaRef}
+                rows={1}
+                placeholder="내용을 입력하세요..."
               />
-              <label className="custom-file-label" htmlFor="file">
-                <FontAwesomeIcon icon={faImage} style={{ marginRight: "10px", cursor: "pointer" }} />
-              </label>
-              <FontAwesomeIcon icon={faBarsStaggered} />
-              <Send onClick={handleSendClick} type="submit">
-                작성하기
-              </Send>
-              <Send onClick={clickBtn}>취소</Send>
-            </Attach>
-          </Content>
+              {imagePreviews.length > 0 && (
+                <PreviewImgDiv>
+                  {imagePreviews.map((preview, index) => (
+                    <img key={index} src={preview} alt={`이미지 미리보기 ${index}`} />
+                  ))}
+                </PreviewImgDiv>
+              )}
+              <Attach>
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                  accept=".jpg,.jpeg,.png,.gif"
+                  multiple
+                />
+                <label className="custom-file-label" htmlFor="file">
+                  <FontAwesomeIcon icon={faImage} style={{ marginRight: "10px", cursor: "pointer" }} />
+                </label>
+                <FontAwesomeIcon icon={faBarsStaggered} />
+                <Send onClick={handleSendClick} type="submit">
+                  작성하기
+                </Send>
+                <Send onClick={clickBtn}>취소</Send>
+              </Attach>
+            </Content>
+          </ModalWrap>
+          {showCaptcha && (
+            <CaptchaWrapper>
+              <Captcha onCaptchaVerify={handleCaptchaVerify} />
+            </CaptchaWrapper>
+          )}
+        </Wrap>
+      ) : null
+    ) : (
+      <Wrap>
+        <ModalWrap>
+          <Captcha></Captcha>
         </ModalWrap>
       </Wrap>
-    ) : null
+    )
   );
 }
 
@@ -258,6 +280,18 @@ const PreviewImgDiv = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const CaptchaWrapper = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
 export default PostWrite;
