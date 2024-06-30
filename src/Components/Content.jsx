@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import io from "socket.io-client";
 import PostView from "./Post/PostView";
+import { useInView } from "react-intersection-observer";
 
 const Wrap = styled.div`
   position: relative;
-  width: 620px; /* 변경된 부분 */
+  width: 620px; 
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -14,13 +15,18 @@ const Wrap = styled.div`
   top: 76px;
   padding-left: 10px;
   padding-right: 10px;
-  margin: 0 auto; /* 중앙 정렬을 위해 추가 */
+  margin: 0 auto;
 
   @media (max-width: 699px) { 
     width: 100%;
     top: 0;
     padding-bottom: 75px;
   }
+`;
+
+const PostWrapper = styled.div`
+  opacity: ${(props) => (props.inView ? 1 : 0)};
+  transition: opacity 0.5s ease-in-out;
 `;
 
 function Content(props) {
@@ -41,18 +47,30 @@ function Content(props) {
   return (
     <Wrap>
       {posts.map((post, index) => (
-        <PostView
-          key={index}
-          index={post.index}
-          title={post.title}
-          nick={post.nick}
-          heart={post.heart}
-          setHeart={props.setHeart}
-          time={post.id}
-          images={post.image}
-        />
+        <PostItem key={index} post={post} setHeart={props.setHeart} />
       ))}
     </Wrap>
+  );
+}
+
+function PostItem({ post, setHeart }) {
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
+  return (
+    <PostWrapper ref={ref} inView={inView}>
+      <PostView
+        index={post.index}
+        title={post.title}
+        nick={post.nick}
+        heart={post.heart}
+        setHeart={setHeart}
+        time={post.id}
+        images={post.image}
+      />
+    </PostWrapper>
   );
 }
 

@@ -6,13 +6,16 @@ import axios from "axios";
 import badWords from '../Utils/badWord.json';
 import "./index.css";
 import Captcha from "../Utils/Captcha";
+import SurveyForm from "./SurveyForm";  // Import the SurveyForm component
 
-function PostWrite({ block, nick, clickBtn }) {
+function PostWrite({block, nick, clickBtn}) {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState("");
   const [files, setFiles] = useState([]);
   const [ip, setIp] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [survey, setSurvey] = useState(null);
+  const [showSurveyForm, setShowSurveyForm] = useState(false);
   const id = Date.now();
   const textareaRef = useRef();
   const [write, setWrite] = useState(true);
@@ -111,12 +114,14 @@ function PostWrite({ block, nick, clickBtn }) {
         id,
         ip,
         title,
-        nick
+        nick,
+        survey // Send survey data
       });
       await handleUpload(postIndex);
       setTitle("");
       setImagePreviews([]);
       setFiles([]);
+      setSurvey(null); // Reset survey data
       clickBtn();
     } catch (error) {
       console.error("Error sending data:", error);
@@ -131,6 +136,15 @@ function PostWrite({ block, nick, clickBtn }) {
   const handleCaptchaVerify = async () => {
     setShowCaptcha(false);
     await sendPostData();
+  };
+
+  const handleSurveySave = (surveyData) => {
+    setSurvey(surveyData);
+    setShowSurveyForm(false);
+  };
+
+  const handleSurveyCancel = () => {
+    setShowSurveyForm(false);
   };
 
   return (
@@ -165,6 +179,11 @@ function PostWrite({ block, nick, clickBtn }) {
                   ))}
                 </PreviewImgDiv>
               )}
+              {showSurveyForm && (
+                <SurveyFormContainer>
+                  <SurveyForm onSave={handleSurveySave} onCancel={handleSurveyCancel} />
+                </SurveyFormContainer>
+              )}
               <Attach>
                 <input
                   type="file"
@@ -178,7 +197,7 @@ function PostWrite({ block, nick, clickBtn }) {
                 <label className="custom-file-label" htmlFor="file">
                   <FontAwesomeIcon icon={faImage} style={{ marginRight: "10px", cursor: "pointer" }} />
                 </label>
-                <FontAwesomeIcon icon={faBarsStaggered} />
+                <FontAwesomeIcon icon={faBarsStaggered} onClick={() => setShowSurveyForm(true)} />
                 <Send onClick={handleSendClick} type="submit">
                   작성하기
                 </Send>
@@ -196,7 +215,7 @@ function PostWrite({ block, nick, clickBtn }) {
     ) : (
       <Wrap>
         <ModalWrap>
-          <Captcha></Captcha>
+          <Captcha ></Captcha>
         </ModalWrap>
       </Wrap>
     )
@@ -292,6 +311,10 @@ const CaptchaWrapper = styled.div`
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const SurveyFormContainer = styled.div`
+  margin-top: 10px;
 `;
 
 export default PostWrite;

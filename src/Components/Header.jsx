@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faPenToSquare, faBars, faSchool, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faPenToSquare, faBars, faUtensils, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faRocketchat } from "@fortawesome/free-brands-svg-icons";
+
 import Setting from "./Setting";
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -150,7 +152,7 @@ function Header(props) {
             <Wrap>
                 <Left>
                     <Link to="/">
-                        <FontAwesomeIcon icon={faSchool} size="2xl" />
+                        <FontAwesomeIcon icon={faInstagram} size="2xl" />
                     </Link>
                 </Left>
                 <Center>
@@ -176,6 +178,11 @@ function Header(props) {
                     <Button>
                         <Link to="/Chat">
                             <FontAwesomeIcon icon={faRocketchat} size="2xl" />
+                        </Link>
+                    </Button>
+                    <Button>
+                        <Link to="/Profile">
+                            <FontAwesomeIcon icon={faUser} size="2xl" />
                         </Link>
                     </Button>
                 </Center>

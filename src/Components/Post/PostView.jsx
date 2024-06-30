@@ -1,3 +1,4 @@
+// src/PostView.js
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +7,7 @@ import { faHeart as HeartOn, faBan } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import axios from "axios";
 import ViewReport from "./ViewReport";
+import PostImage from "./PostImage";
 
 const Wrap = styled.div`
   width: 100%;
@@ -17,7 +19,7 @@ const Wrap = styled.div`
 `;
 
 const Header = styled.div`
-    position: relative;
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
@@ -86,16 +88,10 @@ const ImageWrap = styled.div`
   }
 `;
 
-const PostImage = styled.img`
-  height: 180px;
-  border-radius: 10px;
-  object-fit: cover;
-`;
-
 const Report = styled.div`
   margin-left: auto;
   cursor: pointer;
-  
+
   &:hover {
     color: red;
   }

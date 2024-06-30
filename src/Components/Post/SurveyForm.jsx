@@ -16,10 +16,6 @@ const SurveyForm = ({ onSave, onCancel }) => {
     setQuestions(newQuestions);
   };
 
-  const addQuestion = () => {
-    setQuestions([...questions, { question: "", options: ["", ""] }]);
-  };
-
   const addOption = (qIndex) => {
     const newQuestions = [...questions];
     newQuestions[qIndex].options.push("");
@@ -52,7 +48,6 @@ const SurveyForm = ({ onSave, onCancel }) => {
           <button onClick={() => addOption(qIndex)}>옵션 추가</button>
         </QuestionWrapper>
       ))}
-      <button onClick={addQuestion}>질문 추가</button>
       <button onClick={handleSave}>저장</button>
       <button onClick={onCancel}>취소</button>
     </SurveyWrapper>
